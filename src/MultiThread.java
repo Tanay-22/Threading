@@ -5,10 +5,11 @@ import java.nio.channels.FileChannel;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.logging.Logger;
 
 public class MultiThread
 {
-
+    private static final Logger log = Logger.getLogger(MultiThread.class.getName());
     private static final String INPUT_FILE = "random_words.txt";
     private static final int CHUNK_SIZE = 1024 * 1024; // 1 MB chunk size
     private static final int BATCH_SIZE = 1000; // Process 1000 words per task
@@ -41,7 +42,7 @@ public class MultiThread
             char ch = (char) buffer.get();
             if (ch == '\n' || ch == '\r')
             {
-                if (wordBuilder.length() > 0)
+                if (!wordBuilder.isEmpty())
                 {
                     batch[batchIndex++] = wordBuilder.toString();
                     wordBuilder.setLength(0);
@@ -55,7 +56,7 @@ public class MultiThread
             }
             else
             {
-                wordBuilder.append(ch); // Append character to the current word
+                wordBuilder.append(ch); // Append char to the current word
             }
         }
         // Process the last batch if it's not empty
@@ -92,7 +93,7 @@ public class MultiThread
         }
         catch (IOException e)
         {
-            System.err.println("Error reading file: " + e.getMessage());
+            log.warning("Error reading file: " + e.getMessage());
         }
         finally
         {
@@ -111,8 +112,8 @@ public class MultiThread
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println("Total Time Taken = " + (end - start) + "ms");
-        System.out.println("Length to Count Map: " + lengthMap);
-        System.out.println("Average Length: " + (1.0 * lenSum.sum() / count.sum()));
+        log.info("Total Time Taken = " + (end - start) + "ms");
+        log.info("Length to Count Map: " + lengthMap);
+        log.info("Average Length: " + (1.0 * lenSum.sum() / count.sum()));
     }
 }

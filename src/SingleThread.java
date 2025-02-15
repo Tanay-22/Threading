@@ -4,9 +4,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class SingleThread
 {
+    private static final Logger log = Logger.getLogger(SingleThread.class.getName());
     private static final String INPUT_FILE = "random_words.txt";
 
     public static void main(String[] args)
@@ -25,11 +27,10 @@ public class SingleThread
                 lengthMap.put(len, lengthMap.getOrDefault(word, 0) + 1);
                 lenSum += len;
             }
-            System.out.println("Total Time Taken in Single Threaded = " +
-                    (System.currentTimeMillis() - start) + "ms");
+            log.info("Total Time Taken in Single Threaded = " +
+                            (System.currentTimeMillis() - start) + "ms");
 
-//            System.out.println("Length to Count Map: " + lengthMap);
-            System.out.println("Average Length of word: " + (1.0 * lenSum / count));
+            log.info("Average Length of word: " + (1.0 * lenSum / count));
 
         }
         catch (FileNotFoundException e)
